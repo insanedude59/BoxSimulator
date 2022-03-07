@@ -1,0 +1,49 @@
+--  | Variables | -- 
+
+local root = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+
+_G.autofarm = true
+_G.autocollect = true
+
+
+---------------------------------------------
+
+
+-- | Script | -- 
+
+function getclosestbox()
+    local dist,box = math.huge
+    for i,v in pairs(game:GetService("Workspace").Map.Worlds:GetDescendants()) do
+        if v:IsA("MeshPart") and v.Parent.Name == "Boxes" and v.Parent:IsA("Folder") then
+            local magnitude = (root.Position - v.Position).magnitude
+            if magnitude < dist then
+                dist = magnitude
+                box = v
+            end
+        end
+    end
+    return box
+end
+
+
+
+function autocollect()
+    if _G.autocollect then
+    for i,v in pairs(game:GetService("Workspace").Map.Orbs:GetChildren()) do
+       v.CFrame = CFrame.new(root.Position)
+       end
+    end
+end
+
+
+
+
+
+
+while _G.autofarm do wait(0.3)
+    fireclickdetector(getclosestbox().ClickDetector)
+end
+
+while _G.autocollect do wait()
+    autocollect()
+end
